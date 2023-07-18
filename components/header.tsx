@@ -1,39 +1,43 @@
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import React from 'react';
-import Headroom from 'react-headroom';
+import { useRouter } from 'next/router';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import NavCollapsedContext from '../context/NavCollapsed';
 import Container from './container';
 import HeaderDropdown from './header-dropdown';
-import Heading from './heading';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
 const Header: React.FC = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
   const loading = status === 'loading';
+  const { isNavToggled, setIsNavToggled } = useContext(NavCollapsedContext);
 
   return (
-    <CustomHeadroom>
+    <HeaderItem>
       <HeadroomContainer>
-        <Logo>
-          <Link href='/'>
-            <Heading as={1}>IAMCAMDB</Heading>
-          </Link>
-        </Logo>
-        <Nav>
-          <HeaderDropdown />
-        </Nav>
+        <ToggleButton onClick={() => setIsNavToggled((oldValue) => !oldValue)}>
+          {isNavToggled ? <BsChevronRight /> : <BsChevronLeft />}
+        </ToggleButton>
+        <DropdownContainer>
+          {status !== 'loading' && <HeaderDropdown />}
+        </DropdownContainer>
       </HeadroomContainer>
-    </CustomHeadroom>
+    </HeaderItem>
   );
 };
 
 export default Header;
 
-const CustomHeadroom = styled(Headroom)`
-  margin: 1.5rem 0;
+const HeaderItem = styled.header`
+  grid-area: 1 / 2 / 2 / 6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 `;
 
 const HeadroomContainer = styled(Container)`
@@ -41,8 +45,23 @@ const HeadroomContainer = styled(Container)`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
 `;
 
-const Logo = styled.div``;
+const DropdownContainer = styled.div`
+  flex: 0 0 8rem;
+`;
 
-const Nav = styled.nav``;
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  appearance: none;
+  width: 35px;
+  height: 35px;
+  color: ${(props) => props.theme.colors.white};
+  border-radius: 50%;
+  border: 1px solid ${(props) => props.theme.colors.white};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
