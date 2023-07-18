@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Router } from 'next/router';
 import { useState } from 'react';
 import styled from 'styled-components';
+import Stack from './stack';
+import Text from './text';
 
 const HeaderDropdown = () => {
   const { data: session, status } = useSession();
@@ -21,21 +23,21 @@ const HeaderDropdown = () => {
           <img src={session?.user?.image} alt='user' width={30} height={30} />
         )}
         {session?.user?.email ? (
-          <p>
+          <Text>
             {session?.user?.username
               ? session?.user?.username
               : session?.user?.email}
-          </p>
+          </Text>
         ) : (
           <Link href={'/api/auth/signin'}>Login</Link>
         )}
         {session?.user?.email && <DropdownIcon $isOpen={showDropdown} />}
       </DropdownItemButton>
       {showDropdown && session?.user?.email && (
-        <DropdownMenu>
+        <DropdownMenu gap={2}>
           <DropdownItem href={'/profile'}>Profile</DropdownItem>
           {session?.user?.id ? (
-            <span onClick={() => signOut()}>Logout</span>
+            <Text onClick={() => signOut()}>Logout</Text>
           ) : (
             <Link href={'/api/auth/signin'}>Login</Link>
           )}
@@ -51,7 +53,7 @@ const DropdownContainer = styled.div`
   position: relative;
 `;
 
-const DropdownMenu = styled.div`
+const DropdownMenu = styled(Stack)`
   position: absolute;
   top: 100%;
   right: 0;
