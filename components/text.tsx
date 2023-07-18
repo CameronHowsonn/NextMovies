@@ -25,6 +25,7 @@ const Text: React.FC<TextProps> = ({ children, className, onClick }) => {
 export default Text;
 
 const TextItem = styled.p<TextProps>`
+  color: ${({ theme }) => theme.colors.white};
   ${color}
   ${space}
   ${typography}

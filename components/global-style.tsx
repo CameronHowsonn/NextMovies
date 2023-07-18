@@ -18,6 +18,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: var(--OpenSans);
     font-size: 1em;
     height: 100%;
+    background-color: ${({ theme }) => theme.colors.black};
+    color: ${({ theme }) => theme.colors.white};
   }
 
   h1,
@@ -29,8 +31,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: var(--Monserrat);
     font-weight: 700;
     line-height: 1.2;
+    color: ${({ theme }) => theme.colors.white};
   }
 
+  
   html {
     overflow: hidden auto;
   }
@@ -44,9 +48,6 @@ const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
-    &:visited {
-      color: inherit;
-    }
   }
 
   :root {

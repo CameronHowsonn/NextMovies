@@ -71,11 +71,11 @@ const DropdownContainer = styled.div`
 `;
 
 const DropdownMenu = styled(Stack)`
+  background-color: ${({ theme }) => theme.colors.black};
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: white;
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.colors.grey};
   border-radius: 0.25rem;
   padding: 0.5rem;
   width: 10rem;
@@ -83,7 +83,10 @@ const DropdownMenu = styled(Stack)`
   flex-direction: column;
 `;
 
-const DropdownItem = styled(Link)``;
+const DropdownItem = styled(Link)`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey};
+  padding-bottom: 0.5rem;
+`;
 
 const DropdownItemButton = styled.button`
   background-color: transparent;
@@ -99,7 +102,7 @@ const DropdownItemButton = styled.button`
 `;
 
 const DropdownIcon = styled.div<{ $isOpen: boolean }>`
-  border: solid black;
+  border: solid ${({ theme }) => theme.colors.white};
   border-width: 0 1px 1px 0;
   display: inline-block;
   padding: 3px;
