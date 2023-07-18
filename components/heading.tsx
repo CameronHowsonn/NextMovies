@@ -10,7 +10,7 @@ import {
 } from 'styled-system';
 
 interface HeadingProps extends ColorProps, TypographyProps, SpaceProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   as?: number;
 }
