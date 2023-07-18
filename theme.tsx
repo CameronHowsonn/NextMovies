@@ -1,4 +1,10 @@
 const theme: any = {
+  colors: {
+    red: '#AC1B1B',
+    white: '#E6E7E7',
+    grey: '#252526',
+    black: '#100F12',
+  },
   space: [
     '0',
     '.5rem',
