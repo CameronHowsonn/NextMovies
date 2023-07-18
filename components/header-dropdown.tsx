@@ -1,7 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Router } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Stack from './stack';
 import Text from './text';
@@ -9,15 +9,32 @@ import Text from './text';
 const HeaderDropdown = () => {
   const { data: session, status } = useSession();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const dropDownRef = useRef<HTMLDivElement>(null);
 
   Router.events.on('routeChangeStart', () => {
     setShowDropdown(false);
   });
 
-  console.log(session);
+  // If the user clicks outside the dropdown, close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropDownRef.current &&
+        !dropDownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropDownRef]);
 
   return (
-    <DropdownContainer>
+    <DropdownContainer ref={dropDownRef}>
       <DropdownItemButton onClick={() => setShowDropdown(!showDropdown)}>
         {session?.user?.image && (
           <img src={session?.user?.image} alt='user' width={30} height={30} />
@@ -34,7 +51,7 @@ const HeaderDropdown = () => {
         {session?.user?.email && <DropdownIcon $isOpen={showDropdown} />}
       </DropdownItemButton>
       {showDropdown && session?.user?.email && (
-        <DropdownMenu gap={2}>
+        <DropdownMenu gap={1}>
           <DropdownItem href={'/profile'}>Profile</DropdownItem>
           {session?.user?.id ? (
             <Text onClick={() => signOut()}>Logout</Text>
@@ -64,7 +81,6 @@ const DropdownMenu = styled(Stack)`
   width: 10rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 `;
 
 const DropdownItem = styled(Link)``;
