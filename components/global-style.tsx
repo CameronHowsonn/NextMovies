@@ -42,6 +42,13 @@ const GlobalStyle = createGlobalStyle`
     max-width: 100vw;
   }
 
+  a {
+    text-decoration: none;
+    &:visited {
+      color: inherit;
+    }
+  }
+
   :root {
     -webkit-font-smoothing: antialiased;  
   }
