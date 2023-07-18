@@ -24,7 +24,8 @@
     "payload.config.ts",
     "**/*.ts",
     "**/*.tsx",
-    "next.config.js"
+    "next.config.js",
+    "pages/api/*"
   ],
   "exclude": ["node_modules"],
   "ts-node": {

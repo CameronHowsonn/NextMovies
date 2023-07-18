@@ -1,6 +1,14 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../lib/mongodb';
 
-const UpdateDbUser = async (req, res) => {
+interface UpadateRequest extends NextApiRequest {
+  body: {
+    username: string;
+    id: string;
+  };
+}
+
+const UpdateDbUser = async (req: UpadateRequest, res: NextApiResponse) => {
   const { username, id } = req.body;
   const { client, database, collection } = await connectToDatabase();
 
@@ -13,10 +21,10 @@ const UpdateDbUser = async (req, res) => {
     console.log(
       `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
     );
-    return res.json({ message: 'success' }, { status: 200 });
+    return res.status(200).json({ message: ' success' });
   } catch (error) {
     console.log(error);
-    return res.json({ message: 'error' }, { status: 500 });
+    return res.status(500).json({ error });
   } finally {
     await client.close();
   }
