@@ -2,6 +2,7 @@ import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'styled-components';
+import GlobalStyle from '../components/global-style';
 import Layout from '../components/layout';
 import theme from '../theme';
 
@@ -18,6 +19,7 @@ const App: React.FC<AppPropsWithSession> = ({
   return (
     <SessionProvider session={session}>
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Layout>
           <Component {...pageProps} />
         </Layout>
