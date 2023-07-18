@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '../components/global-style';
 import Layout from '../components/layout';
+import { NavCollapsedProvider } from '../context/NavCollapsed';
 import theme from '../theme';
 
 interface AppPropsWithSession extends AppProps {
@@ -18,12 +19,14 @@ const App: React.FC<AppPropsWithSession> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
+      <NavCollapsedProvider>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </NavCollapsedProvider>
     </SessionProvider>
   );
 };
