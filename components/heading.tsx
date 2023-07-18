@@ -12,12 +12,12 @@ import {
 interface HeadingProps extends ColorProps, TypographyProps, SpaceProps {
   children: React.ReactNode;
   className?: string;
-  level?: number;
+  as?: number;
 }
 
-const Heading: React.FC<HeadingProps> = ({ level, children, className }) => {
+const Heading: React.FC<HeadingProps> = ({ as, children, className }) => {
   return (
-    <StyledHeading as={`h${level}`} className={className}>
+    <StyledHeading as={`h${as}`} className={className}>
       {children}
     </StyledHeading>
   );
@@ -32,7 +32,7 @@ const StyledHeading = styled.h1<HeadingProps>`
 `;
 
 Heading.defaultProps = {
-  level: 1,
+  as: 1,
 };
 
 export default Heading;

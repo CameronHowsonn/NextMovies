@@ -5,6 +5,7 @@ import Headroom from 'react-headroom';
 import styled from 'styled-components';
 import Container from './container';
 import HeaderDropdown from './header-dropdown';
+import Heading from './heading';
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
@@ -18,7 +19,7 @@ const Header: React.FC = () => {
       <HeadroomContainer>
         <Logo>
           <Link href='/'>
-            <h1>IAMCAMDB</h1>
+            <Heading as={1}>IAMCAMDB</Heading>
           </Link>
         </Logo>
         <Nav>
@@ -31,7 +32,9 @@ const Header: React.FC = () => {
 
 export default Header;
 
-const CustomHeadroom = styled(Headroom)``;
+const CustomHeadroom = styled(Headroom)`
+  margin: 1.5rem 0;
+`;
 
 const HeadroomContainer = styled(Container)`
   display: flex;
