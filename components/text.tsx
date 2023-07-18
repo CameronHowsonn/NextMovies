@@ -11,10 +11,15 @@ import {
 interface TextProps extends ColorProps, SpaceProps, TypographyProps {
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
-const Text: React.FC<TextProps> = ({ children, className }) => {
-  return <TextItem className={className}>{children}</TextItem>;
+const Text: React.FC<TextProps> = ({ children, className, onClick }) => {
+  return (
+    <TextItem className={className} onClick={onClick}>
+      {children}
+    </TextItem>
+  );
 };
 
 export default Text;
@@ -22,5 +27,5 @@ export default Text;
 const TextItem = styled.p<TextProps>`
   ${color}
   ${space}
-    ${typography}
+  ${typography}
 `;
