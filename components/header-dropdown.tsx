@@ -15,7 +15,6 @@ const HeaderDropdown = () => {
     setShowDropdown(false);
   });
 
-  // If the user clicks outside the dropdown, close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -77,10 +76,11 @@ const DropdownMenu = styled(Stack)`
   right: 0;
   border: 1px solid ${({ theme }) => theme.colors.grey};
   border-radius: 0.25rem;
-  padding: 0.5rem;
+  padding: 1rem 0.75rem;
   width: 10rem;
   display: flex;
   flex-direction: column;
+  z-index: 4;
 `;
 
 const DropdownItem = styled(Link)`
