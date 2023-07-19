@@ -37,7 +37,7 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
             />
             <SliderButton
               variant='next'
-              disabled={slider.activeIndex === data.length - 1}
+              disabled={slider?.activeIndex === data?.length - 1}
               onClick={() => {
                 slider?.slideNext();
               }}
