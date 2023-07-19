@@ -58,7 +58,10 @@ const FilmCard: React.FC<FilmCardProps> = ({
             {new Date(data?.release_date).toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',
+              year: '2-digit',
             })}
+            {new Date(data?.release_date).toLocaleDateString('en-US') ===
+              new Date().toLocaleDateString('en-US') && ' - (Out Today)'}
           </ReleaseDate>
         )}
         <Heading as={3}>
