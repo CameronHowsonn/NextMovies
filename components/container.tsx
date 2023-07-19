@@ -12,5 +12,5 @@ const Container: React.FC<ContainerProps> = ({ children, className }) => {
 export default Container;
 
 const ContainerItem = styled.div`
-  padding: 0 1.5rem;
+  padding: 0 2rem;
 `;
