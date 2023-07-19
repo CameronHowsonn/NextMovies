@@ -17,7 +17,6 @@ const Profile: React.FC = () => {
     setError(false);
     setSuccess(false);
     e.preventDefault();
-    // send api request to /api/auth/update-user
     const res = fetch('/api/auth/update-user', {
       method: 'POST',
       headers: {

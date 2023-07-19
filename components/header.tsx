@@ -8,9 +8,6 @@ import HeaderDropdown from './header-dropdown';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import Notifications from './notifications';
 
-// The approach used in this component shows how to build a sign in and sign out
-// component that works on pages which support both client and server side
-// rendering, and avoids any flash incorrect content on initial page load.
 const Header: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();

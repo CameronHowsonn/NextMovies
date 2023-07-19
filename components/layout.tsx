@@ -7,7 +7,6 @@ import Navigation from './navigation';
 import TrailerContext from '../context/TrailerModal';
 import VideoModal from './video-modal';
 
-// Import Open Sans and Monserrat fonts
 const OpenSans = Open_Sans({
   variable: '--OpenSans',
   subsets: ['latin'],

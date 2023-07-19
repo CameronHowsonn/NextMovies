@@ -2,21 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../lib/mongodb';
 
 const CreateSharedList = async (req: NextApiRequest, res: NextApiResponse) => {
-  // Create a new shared list, the document format should be
-  // {
-  //     "id": "sharedlistid",
-  //     "name": "My Shared List",
-  //     "description": "This is a shared list",
-  //     "admins": ["userid1", "userid2", "user3"],
-  //     "adminsAccepted": {
-  //         "userid1": true,
-  //         "userid2": true,
-  //         "user3": false
-  //     },
-  //     "movieList": ["movieid1", "movieid2", "movieid3"],
-  //     "tvList": ["tvid1", "tvid2", "tvid3"],
-  // }
-
   const { name, description, userSubmitted, userRequested, id } = req.body;
 
   if (!name || !description || !userSubmitted || !userRequested || !id) {
@@ -46,7 +31,6 @@ const CreateSharedList = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json({ error: 'List already exists' });
     }
 
-    // Check the userRequested exists
     const userRequestedExists = await userCollection.findOne({
       id: userRequested,
     });

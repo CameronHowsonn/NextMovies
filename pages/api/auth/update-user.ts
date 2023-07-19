@@ -14,7 +14,6 @@ const UpdateDbUser = async (req: UpadateRequest, res: NextApiResponse) => {
 
   try {
     const query = { id: id };
-    // Find the document by id and update it
     const result = await userCollection.updateOne(query, {
       $set: { username: username },
     });

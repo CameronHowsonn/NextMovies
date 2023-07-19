@@ -2,10 +2,6 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 const YourList: React.FC = () => {
-  // Get the user's list from the database using the api end point '/api/auth/get-list'
-
-  // Render the list of films using the FilmCard component
-
   const { data: session, status } = useSession();
   const [listData, setListData] = useState(null);
   const [sharedListData, setSharedListData] = useState(null);

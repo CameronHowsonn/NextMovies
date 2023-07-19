@@ -1,5 +1,3 @@
-// Get notifications for a user by id
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../lib/mongodb';
 

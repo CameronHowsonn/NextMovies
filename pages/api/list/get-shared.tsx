@@ -16,8 +16,6 @@ const GetShared = async (req: GetSharedRequest, res: NextApiResponse) => {
 
   const { client, database, sharedLists } = await connectToDatabase();
 
-  // Get shared lists where user is an admin
-
   try {
     const sharedListsCursor = await sharedLists.find({ admins: id });
     const sharedListsArray = await sharedListsCursor.toArray();

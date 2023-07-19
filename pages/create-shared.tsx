@@ -27,7 +27,6 @@ const CreateShared: React.FC = () => {
     setError(false);
     setSuccess(false);
     e.preventDefault();
-    // send api request to /api/auth/update-user
     const res = fetch('/api/auth/create-shared-list', {
       method: 'POST',
       headers: {

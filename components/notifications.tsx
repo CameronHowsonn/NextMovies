@@ -5,9 +5,6 @@ import { AiOutlineBell } from 'react-icons/ai';
 import styled from 'styled-components';
 
 const Notifications: React.FC = () => {
-  // Hit the /api/auth/get-notifications endpoint
-  // to get the notifications for the current user
-
   const { data: session, status } = useSession();
   const [hasUnreadNotifications, setHasUnreadNotifications] =
     useState<boolean>(false);
