@@ -56,12 +56,20 @@ const ToggleButton = styled.button`
   background: none;
   border: none;
   appearance: none;
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 44px;
   color: ${(props) => props.theme.colors.white};
-  border-radius: 50%;
-  border: 1px solid ${(props) => props.theme.colors.white};
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.colors.grey};
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.red};
+    transform: scale(1.1);
+    color: ${(props) => props.theme.colors.black};
+  }
 `;
