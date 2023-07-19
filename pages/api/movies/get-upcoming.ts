@@ -18,11 +18,14 @@ const GetUpcoming = async (req: NextApiRequest, res: NextApiResponse) => {
   }`;
 
   await fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US& page=${page}&primary_release_date.gte=${todayDate}`
+    `https://api.themoviedb.org/3/discover/movie?api_key=${
+      process.env.REACT_APP_API_KEY
+    }&language=en-US& page=${page}&primary_release_date.gte=${todayDate}&primary_release_date.lte=${
+      year + 1
+    }`
   )
     .then((response) => response.json())
     .then((data: Movie) => {
-      console.log(data);
       res.status(200).json(data);
     })
     .catch((error) => {
