@@ -7,6 +7,8 @@ import Layout from '../components/layout';
 import { NavCollapsedProvider } from '../context/NavCollapsed';
 import theme from '../theme';
 import { TrailerProvider } from '../context/TrailerModal';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface AppPropsWithSession extends AppProps {
   pageProps: AppProps['pageProps'] & {
@@ -25,6 +27,18 @@ const App: React.FC<AppPropsWithSession> = ({
           <ThemeProvider theme={theme}>
             <GlobalStyle />
             <Layout>
+              <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme='dark'
+              />
               <Component {...pageProps} />
             </Layout>
           </ThemeProvider>
