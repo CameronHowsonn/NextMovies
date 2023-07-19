@@ -11,6 +11,8 @@ import TrailerContext from '../context/TrailerModal';
 import Button from './button';
 import { BsFillPlayFill } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
 interface FilmCardProps {
   data: MovieItem;
@@ -23,6 +25,8 @@ const FilmCard: React.FC<FilmCardProps> = ({
 }) => {
   const [trailerData, setTrailerData] = useState(null);
   const { setTrailerUrl, setIsModalOpen } = useContext(TrailerContext);
+  const [error, setError] = useState(false);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchTrailer = async () => {
@@ -37,12 +41,31 @@ const FilmCard: React.FC<FilmCardProps> = ({
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setTrailerData(data);
         });
     };
     fetchTrailer();
   }, []);
+
+  const addToList = async (id, filmId, type) => {
+    const res = await fetch(`/api/auth/add-item-to-list`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        itemId: filmId,
+        type,
+      }),
+    });
+    const data = await res.json();
+    if (data.message !== 'success') {
+      setError(data.message);
+      console.log('toast');
+      toast('Film already in list');
+    }
+  };
 
   return (
     <Card gap={2}>
@@ -83,7 +106,13 @@ const FilmCard: React.FC<FilmCardProps> = ({
             Trailer
           </Button>
         )}
-        <Button fullWidth variant='secondary'>
+        <Button
+          fullWidth
+          variant='secondary'
+          onClick={() => {
+            addToList(session?.user.id, data?.id, 'movie');
+          }}
+        >
           <AiOutlinePlus />
           Watchlist
         </Button>
