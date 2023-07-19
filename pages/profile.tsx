@@ -41,6 +41,7 @@ const Profile: React.FC = () => {
   return (
     <Container>
       <h1>Profile</h1>
+      <h1>Your profile ID is {session?.user?.id}</h1>
       {error && (
         <p>
           There was an error updating your profile. The Username may be taken.
