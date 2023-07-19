@@ -10,12 +10,12 @@ interface UpadateRequest extends NextApiRequest {
 
 const UpdateDbUser = async (req: UpadateRequest, res: NextApiResponse) => {
   const { username, id } = req.body;
-  const { client, database, collection } = await connectToDatabase();
+  const { client, database, userCollection } = await connectToDatabase();
 
   try {
     const query = { id: id };
     // Find the document by id and update it
-    const result = await collection.updateOne(query, {
+    const result = await userCollection.updateOne(query, {
       $set: { username: username },
     });
     console.log(
