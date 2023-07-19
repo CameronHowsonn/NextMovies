@@ -208,6 +208,8 @@ const NavStack = styled(Stack)`
   padding: 2rem 2rem 0 2rem;
   grid-area: 1 / 1 / 6 / 2;
   border-right: 1px solid ${({ theme }) => theme.colors.grey};
+  position: sticky;
+  top: 0;
 `;
 
 const LinkItems = styled.div`
