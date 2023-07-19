@@ -33,7 +33,6 @@ const BrowseHero: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log(sliderIndex);
     if (mainSlider && subSlider) {
       mainSlider.slideTo(sliderIndex);
       subSlider.slideTo(sliderIndex);
