@@ -38,6 +38,7 @@ const HeaderItem = styled.header`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  min-height: 8.25em;
 `;
 
 const HeadroomContainer = styled(Container)`
