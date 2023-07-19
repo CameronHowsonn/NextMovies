@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { AiFillCompass, AiOutlineUser } from 'react-icons/ai';
+import {
+  AiFillCompass,
+  AiOutlineUnorderedList,
+  AiOutlineUser,
+} from 'react-icons/ai';
 import { BsGraphUpArrow } from 'react-icons/bs';
 import styled from 'styled-components';
 import NavCollapsedContext from '../context/NavCollapsed';
@@ -15,12 +19,12 @@ const Navigation: React.FC = () => {
 
   return (
     <NavStack gap={2}>
-      <LogoLink href='/'>
+      <Link href='/'>
         <LogoContainer>
           <ClosedLogo></ClosedLogo>
           <Logo>NextMovies</Logo>
         </LogoContainer>
-      </LogoLink>
+      </Link>
       <Nav>
         <LinkItems>
           <NavLink href='/' $isActive={router.pathname === '/'}>
@@ -44,6 +48,15 @@ const Navigation: React.FC = () => {
             </span>
             <Text>Following</Text>
           </NavLink>
+          <NavLink
+            href='/your-list'
+            $isActive={router.pathname === '/your-list'}
+          >
+            <span>
+              <AiOutlineUnorderedList />
+            </span>
+            <Text>Your List</Text>
+          </NavLink>
         </LinkItems>
       </Nav>
     </NavStack>
@@ -59,10 +72,10 @@ const Logo = styled(Heading)`
   top: 0.55rem;
   left: 4rem;
   opacity: 1;
-  transition: opacity 0.1s ease-in-out 0.25s;
+  transition: opacity 0.3s ease-in-out 0.25s;
 
   .nav-closed & {
-    transition: opacity 0.1s ease-in-out 0s;
+    transition: opacity 0.3s ease-in-out 0s;
     pointer-events: none;
     width: 0px;
     opacity: 0;
@@ -91,12 +104,6 @@ const ClosedLogo = styled(Heading)`
   }
 `;
 
-const LogoLink = styled(Link)`
-  width: 100%;
-  display: block;
-  height: 3rem;
-`;
-
 const LogoContainer = styled.div`
   position: relative;
 `;
@@ -113,16 +120,49 @@ const NavLink = styled(Link)<{ $isActive?: boolean }>`
   position: absolute;
   left: 0;
 
+  svg {
+    transition: color 0.3s ease-in-out;
+  }
+
+  .nav-closed & {
+    svg {
+      ${(props) =>
+        props.$isActive &&
+        `
+        color: ${props.theme.colors.red};
+      `}
+      &:hover {
+        color: ${({ theme }) => theme.colors.red};
+      }
+    }
+  }
+
   &:nth-child(1) {
     top: 6rem;
+    p {
+      transition: opacity 0.3s ease-in-out 0.15s, color 0.1s ease-in-out;
+    }
   }
 
   &:nth-child(2) {
     top: 9rem;
+    p {
+      transition: opacity 0.3s ease-in-out 0.25s, color 0.1s ease-in-out;
+    }
   }
 
   &:nth-child(3) {
     top: 12rem;
+    p {
+      transition: opacity 0.3s ease-in-out 0.35s, color 0.1s ease-in-out;
+    }
+  }
+
+  &:nth-child(4) {
+    top: 15rem;
+    p {
+      transition: opacity 0.3s ease-in-out 0.45s, color 0.1s ease-in-out;
+    }
   }
 
   span {
@@ -141,18 +181,25 @@ const NavLink = styled(Link)<{ $isActive?: boolean }>`
     top: 0;
     left: 2rem;
     opacity: 1;
-    transition: opacity 0.1s ease-in-out 0.25s;
+    width: 5rem;
     .nav-closed & {
-      transition: opacity 0.1s ease-in-out 0s;
       opacity: 0;
       visibility: hidden;
+    }
+  }
+
+  &:hover {
+    p {
+      color: ${({ theme }) => theme.colors.red};
     }
   }
 
   ${(props) =>
     props.$isActive === true &&
     `
-    color: ${props.theme.colors.red};    
+    p {
+      color: ${props.theme.colors.red};    
+    }
   `}
 `;
 
