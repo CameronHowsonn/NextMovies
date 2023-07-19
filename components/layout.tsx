@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import NavCollapsedContext from '../context/NavCollapsed';
 import Header from './header';
 import Navigation from './navigation';
+import TrailerContext from '../context/TrailerModal';
+import VideoModal from './video-modal';
 
 // Import Open Sans and Monserrat fonts
 const OpenSans = Open_Sans({
@@ -18,6 +20,8 @@ const MontserratFont = Montserrat({
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { isNavToggled, setIsNavToggled } = useContext(NavCollapsedContext);
+  const { trailerUrl, setTrailerUrl, setIsModalOpen, isModalOpen } =
+    useContext(TrailerContext);
 
   useEffect(() => {
     if (isNavToggled) {
@@ -27,12 +31,23 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
   }, [isNavToggled]);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+    } else {
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+    }
+  }, [isModalOpen]);
+
   return (
     <>
       <Main
         className={`${OpenSans.className} ${MontserratFont.className}`}
         $navToggle={isNavToggled}
       >
+        {isModalOpen && <VideoModal url={trailerUrl} />}
         <Header />
         <Navigation />
         <MainContent>{children}</MainContent>

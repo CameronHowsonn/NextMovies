@@ -14,6 +14,17 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    .modal-open & {
+      overflow: hidden;
+    }
+  }
+
+  .modal-open {
+    overflow: hidden;
+  }
+
+
   body {
     font-family: var(--OpenSans);
     font-size: 1em;

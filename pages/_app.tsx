@@ -6,6 +6,7 @@ import GlobalStyle from '../components/global-style';
 import Layout from '../components/layout';
 import { NavCollapsedProvider } from '../context/NavCollapsed';
 import theme from '../theme';
+import { TrailerProvider } from '../context/TrailerModal';
 
 interface AppPropsWithSession extends AppProps {
   pageProps: AppProps['pageProps'] & {
@@ -20,12 +21,14 @@ const App: React.FC<AppPropsWithSession> = ({
   return (
     <SessionProvider session={session}>
       <NavCollapsedProvider>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
+        <TrailerProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </TrailerProvider>
       </NavCollapsedProvider>
     </SessionProvider>
   );
