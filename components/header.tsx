@@ -6,6 +6,7 @@ import NavCollapsedContext from '../context/NavCollapsed';
 import Container from './container';
 import HeaderDropdown from './header-dropdown';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import Notifications from './notifications';
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
@@ -23,6 +24,7 @@ const Header: React.FC = () => {
           {isNavToggled ? <BsChevronRight /> : <BsChevronLeft />}
         </ToggleButton>
         <DropdownContainer>
+          <Notifications />
           {status !== 'loading' && <HeaderDropdown />}
         </DropdownContainer>
       </HeadroomContainer>
