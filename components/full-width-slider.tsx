@@ -11,50 +11,58 @@ interface FullWidthSliderProps {
   data: any;
   title: string;
   slidesPerView?: number;
+  showReleaseDate?: boolean;
 }
 
 const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
   data,
   title,
   slidesPerView = 5,
+  showReleaseDate = false,
 }) => {
   const [slider, setSlider] = useState(null);
+  const [sliderIndex, setSliderIndex] = useState<number>(0);
 
   return (
     <SliderContainer>
       <Stack gap={4}>
         <Header>
           {title && <Heading as={2}>{title}</Heading>}
-          <ButtonContainer>
-            <SliderButton
-              variant='prev'
-              disabled={slider?.activeIndex === 0}
-              onClick={() => {
-                slider?.slidePrev();
-              }}
-              className='prev'
-              colorVariant='light'
-            />
-            <SliderButton
-              variant='next'
-              disabled={slider?.activeIndex === data?.length - 1}
-              onClick={() => {
-                slider?.slideNext();
-              }}
-              className='next'
-              colorVariant='light'
-            />
-          </ButtonContainer>
+          {slider?.initialized && (
+            <ButtonContainer>
+              <SliderButton
+                variant='prev'
+                disabled={sliderIndex === 0}
+                onClick={() => {
+                  slider?.slidePrev();
+                }}
+                className='prev'
+                colorVariant='light'
+              />
+              <SliderButton
+                variant='next'
+                disabled={sliderIndex === data?.length - 1}
+                onClick={() => {
+                  slider?.slideNext();
+                }}
+                className='next'
+                colorVariant='light'
+              />
+            </ButtonContainer>
+          )}
         </Header>
         <SwiperItem
           slidesPerView={slidesPerView}
           spaceBetween={25}
           onSwiper={(swiper) => setSlider(swiper)}
+          onActiveIndexChange={(swiperCore) => {
+            setSliderIndex(swiperCore.activeIndex);
+          }}
         >
           {data &&
             data.map((item, index) => (
               <SwiperSlideItem key={index}>
-                <FilmCard data={item} />
+                <FilmCard data={item} showReleaseDate={showReleaseDate} />
               </SwiperSlideItem>
             ))}
         </SwiperItem>

@@ -16,7 +16,6 @@ const Index: React.FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.results.length);
         setUpcomingFilms(data.results);
       });
   }, []);
@@ -24,11 +23,14 @@ const Index: React.FC = () => {
   return (
     <>
       <BrowseHero />
-      <FullWidthSlider
-        data={upcomingFilms}
-        title='Upcoming Films'
-        slidesPerView={6}
-      />
+      {upcomingFilms && (
+        <FullWidthSlider
+          data={upcomingFilms}
+          title='Upcoming Films'
+          slidesPerView={5}
+          showReleaseDate={true}
+        />
+      )}
     </>
   );
 };
