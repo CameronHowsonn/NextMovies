@@ -1,18 +1,18 @@
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { BsFillPlayFill } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import TrailerContext from '../context/TrailerModal';
 import { MovieItem } from '../types/movies';
+import Button from './button';
 import Heading from './heading';
 import Stack from './stack';
 import StarRating from './star-rating';
-import Link from 'next/link';
 import Text from './text';
-import { useContext, useEffect, useState } from 'react';
-import VideoModal from './video-modal';
-import TrailerContext from '../context/TrailerModal';
-import Button from './button';
-import { BsFillPlayFill } from 'react-icons/bs';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { useSession } from 'next-auth/react';
-import { toast } from 'react-toastify';
+import WatchListDropdown from './watch-list-dropdown';
 
 interface FilmCardProps {
   data: MovieItem;
@@ -25,6 +25,7 @@ const FilmCard: React.FC<FilmCardProps> = ({
 }) => {
   const [trailerData, setTrailerData] = useState(null);
   const { setTrailerUrl, setIsModalOpen } = useContext(TrailerContext);
+  const [listDropdownOpen, setListDropdownOpen] = useState(false);
   const [error, setError] = useState(false);
   const { data: session, status } = useSession();
 
@@ -47,7 +48,7 @@ const FilmCard: React.FC<FilmCardProps> = ({
     fetchTrailer();
   }, []);
 
-  const addToList = async (id, filmId, type) => {
+  const addToList = async (id, filmId, type, movieName) => {
     const res = await fetch(`/api/auth/add-item-to-list`, {
       method: 'POST',
       headers: {
@@ -61,19 +62,27 @@ const FilmCard: React.FC<FilmCardProps> = ({
     });
     const data = await res.json();
     if (data.message !== 'success') {
-      setError(data.message);
-      console.log('toast');
-      toast('Film already in list');
+      toast(data.message);
+      return;
     }
+    toast(`${movieName} added to watchlist`);
   };
 
   return (
     <Card gap={2}>
-      <Link href={`/film/${data?.id}`}>
-        <ImageContainer>
-          <img src={`https://image.tmdb.org/t/p/w500${data?.poster_path}`} />
-        </ImageContainer>
-      </Link>
+      <TopContainer>
+        <Link href={`/film/${data?.id}`}>
+          <ImageContainer>
+            <img src={`https://image.tmdb.org/t/p/w500${data?.poster_path}`} />
+          </ImageContainer>
+        </Link>
+        {listDropdownOpen && (
+          <WatchListDropdown
+            movieId={data?.id}
+            setListDropdownOpen={setListDropdownOpen}
+          />
+        )}
+      </TopContainer>
       <TextContainer gap={1}>
         <StarRating rating={Math.ceil(data?.vote_average)} />
         {showReleaseDate && (
@@ -110,7 +119,11 @@ const FilmCard: React.FC<FilmCardProps> = ({
           fullWidth
           variant='secondary'
           onClick={() => {
-            addToList(session?.user.id, data?.id, 'movie');
+            if (status === 'unauthenticated') {
+              toast('You must be logged in to add to your watchlist');
+              return;
+            }
+            setListDropdownOpen((prev) => !prev);
           }}
         >
           <AiOutlinePlus />
@@ -151,4 +164,9 @@ const TextContainer = styled(Stack)`
 const ReleaseDate = styled(Text)`
   font-size: 12px;
   font-weight: 600;
+`;
+
+const TopContainer = styled.div`
+  position: relative;
+  overflow: hidden;
 `;
