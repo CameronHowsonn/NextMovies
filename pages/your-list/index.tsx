@@ -19,8 +19,10 @@ const YourList: React.FC = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setListData(data.list);
-        });
+          console.log(data);
+          setListData(data.lists);
+        })
+        .catch((err) => console.log(err));
 
       fetch(`/api/list/get-shared`, {
         method: 'POST',
@@ -34,8 +36,8 @@ const YourList: React.FC = () => {
         .then((res) => res.json())
         .then((data) => {
           setSharedListData(data);
-          console.log(data);
-        });
+        })
+        .catch((err) => console.log(err));
     }
   }, [session]);
 
@@ -44,9 +46,13 @@ const YourList: React.FC = () => {
       <h1>Your List</h1>
       {listData && (
         <>
-          {listData?.movieList.map((item) => (
-            <p>{item}</p>
-          ))}
+          {listData?.map((list) => {
+            return (
+              <div key={list.id}>
+                <p>{list.name}</p>
+              </div>
+            );
+          })}
         </>
       )}
       <hr />
@@ -54,7 +60,6 @@ const YourList: React.FC = () => {
       {sharedListData && (
         <>
           {sharedListData?.sharedLists?.map((list) => {
-            console.log(list);
             return (
               <div key={list.id}>
                 <p>{list.name}</p>
