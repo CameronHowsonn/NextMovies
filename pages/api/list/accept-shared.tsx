@@ -40,6 +40,7 @@ const AcceptShared = async (req: AcceptSharedRequest, res: NextApiResponse) => {
         $set: {
           admins: admins,
           adminsAccepted: adminsAccepted,
+          listId: id,
         },
       }
     );

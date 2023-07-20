@@ -6,61 +6,41 @@ interface UpdateRequest extends NextApiRequest {
     id: string;
     itemId: string;
     type: 'movie' | 'tv';
+    listType: 'personal' | 'shared';
   };
 }
 
 const AddItemToList = async (req: UpdateRequest, res: NextApiResponse) => {
-  const { id, itemId, type } = req.body;
-  const { client, database, listCollection } = await connectToDatabase();
+  const { id, itemId, type, listType } = req.body;
+  const { client, database, listCollection, sharedLists } =
+    await connectToDatabase();
 
   if (!id || !itemId || !type)
     return res.status(400).json({ message: 'Missing required fields' });
-
   try {
-    const query = { id: id };
-    const doesListExist = await listCollection.findOne(query);
-    if (!doesListExist) {
-      if (type === 'movie') {
-        await listCollection.insertOne({
-          id: id,
-          movieList: [itemId],
-        });
-      } else {
-        await listCollection.insertOne({
-          id: id,
-          tvList: [itemId],
-        });
-      }
-      return res.status(200).json({ message: 'success' });
-    }
-    const doesFilmExist = doesListExist?.movieList?.filter(
-      (item) => item === itemId
-    );
-    const doesTvExist = doesListExist?.tvList?.filter(
-      (item) => item === itemId
-    );
+    const query = { listId: id };
+    const update = {
+      $addToSet: { [type === 'movie' ? 'movieList' : 'tvList']: itemId },
+    };
 
-    if (doesFilmExist?.length > 0 || doesTvExist?.length > 0) {
-      return res.status(400).json({ message: 'Item already exists in list' });
-    }
     let result;
-    if (type === 'movie') {
-      result = await listCollection.updateOne(query, {
-        $push: { movieList: itemId },
-      });
-    } else {
-      result = await listCollection.updateOne(query, {
-        $push: { tvList: itemId },
-      });
+
+    if (listType === 'personal') {
+      result = await listCollection.updateOne(query, update);
     }
 
-    console.log(
-      `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-    );
-    return res.status(200).json({ message: 'success' });
+    if (listType === 'shared') {
+      result = await sharedLists.updateOne(query, update);
+    }
+
+    if (!result) {
+      return res.status(400).json({ message: 'List not found', result });
+    }
+
+    return res.status(200).json({ message: 'success', result });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error });
+    return res.status(500).json({ error, message: 'error' });
   } finally {
     await client.close();
   }
