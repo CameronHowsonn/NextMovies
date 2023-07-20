@@ -37,7 +37,6 @@ const HeaderItem = styled.header`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  min-height: 8.25em;
 `;
 
 const HeadroomContainer = styled(Container)`
@@ -49,7 +48,11 @@ const HeadroomContainer = styled(Container)`
 `;
 
 const DropdownContainer = styled.div`
-  flex: 0 0 8rem;
+  flex: 0 0 12rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2rem;
 `;
 
 const ToggleButton = styled.button`

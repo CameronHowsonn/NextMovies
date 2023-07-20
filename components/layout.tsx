@@ -62,7 +62,7 @@ const MainContent = styled.div`
 const Main = styled.main<{ $navToggle?: boolean }>`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 0.5fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.35fr 1fr 1fr 1fr 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   transition: grid-template-columns 0.5s ease-in-out 0.15s;
