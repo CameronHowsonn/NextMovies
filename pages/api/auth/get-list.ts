@@ -15,9 +15,10 @@ const GetList = async (req: GetListRequest, res: NextApiResponse) => {
 
   try {
     const query = { id: id };
-    const list = await listCollection.findOne(query);
+    const list = await listCollection.find(query);
+    const listArray = await list.toArray();
     if (!list) return res.status(400).json({ message: 'List does not exist' });
-    return res.status(200).json({ list });
+    return res.status(200).json({ lists: listArray });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error });
