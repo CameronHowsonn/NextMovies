@@ -20,7 +20,6 @@ const Notifications: React.FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         const unreadNotifications = data?.notificationItems?.filter(
           (notification) => !notification.read
         )?.length;
@@ -31,7 +30,7 @@ const Notifications: React.FC = () => {
   return (
     <NotificationContainer hasNotifications={hasUnreadNotifications}>
       <Link href='/notifications'>
-        <AiOutlineBell />
+        <AiOutlineBell fontSize={'1.75rem'} />
       </Link>
     </NotificationContainer>
   );
@@ -42,20 +41,22 @@ export default Notifications;
 const NotificationContainer = styled.div<{ hasNotifications: boolean }>`
   position: relative;
   cursor: pointer;
+  top: 0.25rem;
+  svg {
+    color: ${(props) => props.theme.colors.white};
+  }
   ${(props) =>
-    props.hasNotifications &&
+    !props.hasNotifications &&
     `
       &::after {
         content: '';
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 3px;
+        right: 3px;
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background-color: red;
-
-          
+        background-color: ${props.theme.colors.red};
     }
     `}
 `;
