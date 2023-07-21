@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import Container from '../container';
-import Heading from '../heading';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import Image from 'next/image';
-import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
-import StarRating from '../star-rating';
 import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
+import { BsChevronRight } from 'react-icons/bs';
+import styled from 'styled-components';
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Movie, MovieItem } from '../../types/movies';
+import Heading from '../heading';
 import SliderButton from '../slider-button';
+import StarRating from '../star-rating';
 
 const BrowseHero: React.FC = () => {
   const [data, setData] = useState<Movie>(null);
@@ -61,6 +59,7 @@ const BrowseHero: React.FC = () => {
             setSliderIndex(swiperCore.activeIndex);
           }}
           onSwiper={(swiper) => setSubSlider(swiper)}
+          lazyPreloadPrevNext={2}
         >
           {data &&
             data.results.map((movie: MovieItem, index: number) => (
@@ -73,6 +72,7 @@ const BrowseHero: React.FC = () => {
                 <img
                   src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
                   alt={movie.title}
+                  loading='lazy'
                 />
               </InnerSwiperSlideItem>
             ))}
@@ -93,6 +93,7 @@ const BrowseHero: React.FC = () => {
         onSwiper={(swiper) => setMainSlider(swiper)}
         allowTouchMove={false}
         noSwiping={true}
+        lazyPreloadPrevNext={2}
       >
         {data &&
           data.results.map((movie: MovieItem) => (
@@ -109,6 +110,7 @@ const BrowseHero: React.FC = () => {
                 src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                 alt={movie.title}
                 ref={mainImage}
+                loading='lazy'
               />
             </SwiperSlideItem>
           ))}
