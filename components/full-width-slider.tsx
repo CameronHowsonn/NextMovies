@@ -1,24 +1,31 @@
-import styled from 'styled-components';
-import Container from './container';
-import Heading from './heading';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import FilmCard from './film-card';
-import Stack from './stack';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import Container from './container';
+import FilmCard from './film-card';
+import Heading from './heading';
+import PersonCard from './person-card';
 import SliderButton from './slider-button';
+import Stack from './stack';
+import Text from './text';
+import TvCard from './tv-card';
 
 interface FullWidthSliderProps {
   data: any;
   title: string;
+  subtitle?: string;
   slidesPerView?: number;
   showReleaseDate?: boolean;
+  type?: 'movie' | 'tv' | 'person';
 }
 
 const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
   data,
   title,
+  subtitle,
   slidesPerView = 5,
   showReleaseDate = false,
+  type,
 }) => {
   const [slider, setSlider] = useState(null);
   const [sliderIndex, setSliderIndex] = useState<number>(0);
@@ -27,7 +34,10 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
     <SliderContainer>
       <Stack gap={4}>
         <Header>
-          {title && <Heading as={2}>{title}</Heading>}
+          <HeaderText>
+            {title && <Heading as={2}>{title}</Heading>}
+            {subtitle && <Text>{subtitle}</Text>}
+          </HeaderText>
           {slider?.initialized && (
             <ButtonContainer>
               <SliderButton
@@ -58,13 +68,24 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
           onActiveIndexChange={(swiperCore) => {
             setSliderIndex(swiperCore.activeIndex);
           }}
+          lazyPreloadPrevNext={1}
         >
           {data &&
-            data.map((item, index) => (
-              <SwiperSlideItem key={index}>
-                <FilmCard data={item} showReleaseDate={showReleaseDate} />
-              </SwiperSlideItem>
-            ))}
+            data.map((item, index) => {
+              if (type === 'person' && !item.profile_path) return null;
+
+              return (
+                <SwiperSlideItem key={index}>
+                  {type === 'tv' && (
+                    <TvCard data={item} showReleaseDate={showReleaseDate} />
+                  )}
+                  {type === 'movie' && (
+                    <FilmCard data={item} showReleaseDate={showReleaseDate} />
+                  )}
+                  {type === 'person' && <PersonCard data={item} />}
+                </SwiperSlideItem>
+              );
+            })}
         </SwiperItem>
       </Stack>
     </SliderContainer>
@@ -76,6 +97,7 @@ export default FullWidthSlider;
 const Header = styled.div`
   justify-content: space-between;
   display: flex;
+  align-items: center;
 `;
 
 const SwiperItem = styled(Swiper)`
@@ -113,4 +135,14 @@ const ButtonContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1rem;
+`;
+
+const HeaderText = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+
+  > * {
+    flex: 0 0 100%;
+  }
 `;

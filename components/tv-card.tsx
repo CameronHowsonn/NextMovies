@@ -6,7 +6,6 @@ import { BsFillPlayFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import TrailerContext from '../context/TrailerModal';
-import { MovieItem } from '../types/movies';
 import Button from './button';
 import Heading from './heading';
 import Stack from './stack';
@@ -15,14 +14,11 @@ import Text from './text';
 import WatchListDropdown from './watch-list-dropdown';
 
 interface FilmCardProps {
-  data: MovieItem;
+  data: any;
   showReleaseDate?: boolean;
 }
 
-const FilmCard: React.FC<FilmCardProps> = ({
-  data,
-  showReleaseDate = false,
-}) => {
+const TvCard: React.FC<FilmCardProps> = ({ data, showReleaseDate = false }) => {
   const [trailerData, setTrailerData] = useState(null);
   const { setTrailerUrl, setIsModalOpen } = useContext(TrailerContext);
   const [listDropdownOpen, setListDropdownOpen] = useState(false);
@@ -73,10 +69,15 @@ const FilmCard: React.FC<FilmCardProps> = ({
           </ReleaseDate>
         )}
         <Heading as={3}>
-          {data?.title.length > 25
-            ? `${data?.title.substring(0, 25)}...`
-            : data?.title}
+          {data?.name.length > 25
+            ? `${data?.name.substring(0, 25)}...`
+            : data?.name}
         </Heading>
+        <Text>
+          {data?.overview.length > 100
+            ? `${data?.overview.substring(0, 150)}...`
+            : data?.overview}
+        </Text>
         <Button
           fullWidth
           onClick={() => {
@@ -118,7 +119,7 @@ const FilmCard: React.FC<FilmCardProps> = ({
   );
 };
 
-export default FilmCard;
+export default TvCard;
 
 const Card = styled(Stack)`
   height: 100%;
@@ -132,6 +133,18 @@ const Card = styled(Stack)`
 
 const ImageContainer = styled.div`
   overflow: hidden;
+  max-height: 15rem;
+  object-fit: cover;
+  object-position: center;
+  position: relative;
+  height: 15rem;
+  img {
+    height: 15rem;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 `;
 
 const TextContainer = styled(Stack)`
