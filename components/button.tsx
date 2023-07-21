@@ -1,33 +1,24 @@
 import styled from 'styled-components';
+import { margin } from 'styled-system';
 
-type ButtonProps = {
+import {
+  ColorProps,
+  LayoutProps,
+  SpaceProps,
+  TypographyProps,
+} from 'styled-system';
+
+export interface ButtonProps
+  extends ColorProps,
+    SpaceProps,
+    LayoutProps,
+    TypographyProps {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'tertiary';
   onClick?: () => void;
   className?: string;
   fullWidth?: boolean;
-};
-
-const Button: React.FC<ButtonProps> = ({
-  children,
-  variant,
-  onClick,
-  className,
-  fullWidth,
-}) => {
-  return (
-    <StyledButton
-      onClick={onClick}
-      variant={variant}
-      className={className}
-      fullWidth={fullWidth}
-    >
-      {children}
-    </StyledButton>
-  );
-};
-
-export default Button;
+}
 
 const StyledButton = styled.button<ButtonProps>`
   background-color: ${(props) => props.theme.colors.red};
@@ -43,6 +34,7 @@ const StyledButton = styled.button<ButtonProps>`
   align-items: center;
   gap: 0.5rem;
   border: 1px solid transparent;
+  ${margin}
 
   &:hover {
     background-color: ${(props) => props.theme.colors.black};
@@ -64,3 +56,5 @@ const StyledButton = styled.button<ButtonProps>`
         }
     `}
 `;
+
+export default StyledButton;
