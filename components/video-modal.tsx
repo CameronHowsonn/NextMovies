@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 import TrailerContext from '../context/TrailerModal';
-import ReactPlayer from 'react-player';
 
 interface VideoModalProps {
   url: string;
@@ -12,8 +12,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ url, site }) => {
   const { isModalOpen, setIsModalOpen } = useContext(TrailerContext);
   const [key, setKey] = useState<number>(0);
   const [videoSize, setVideoSize] = useState({ width: 0, height: 0 });
-
-  // Create a 1080 aspect ratio for the video based on the width of the screen
+  const playerRef = useRef(null);
 
   useEffect(() => {
     const setSizes = () => {
@@ -24,19 +23,26 @@ const VideoModal: React.FC<VideoModalProps> = ({ url, site }) => {
       setVideoSize({ width: width, height: height });
     };
 
+    const closeOnClickedOutside = (e) => {
+      if (playerRef?.current && !playerRef?.current?.contains(e.target)) {
+        setIsModalOpen(false);
+      }
+    };
+
     document.addEventListener('resize', () => setSizes());
+    document.addEventListener('click', closeOnClickedOutside);
 
     setSizes();
-
     return () => {
       document.removeEventListener('resize', () => setSizes());
+      document.removeEventListener('click', closeOnClickedOutside);
     };
   }, []);
 
   return (
     <Modal key={key}>
       <CloseButton onClick={() => setIsModalOpen(false)} />
-      <ModalContent>
+      <ModalContent ref={playerRef}>
         {videoSize.width && videoSize.height && (
           <Player
             url={url}
