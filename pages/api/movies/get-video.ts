@@ -13,11 +13,14 @@ const GetVideo = async (req: NextApiRequest, res: NextApiResponse) => {
     .then((response) => response.json())
     .then((data) => {
       const video = data.results.filter((video) => video.type === 'Trailer');
+      const nonTrailerVideo =
+        data.results[(Math.random() * data.results.length) | 0];
       if (video.length === 0) {
-        res.status(404).json({ message: 'Video not found' });
+        res.status(200).json({ video: nonTrailerVideo });
         return;
+      } else {
+        return res.status(200).json({ video: video[0] });
       }
-      res.status(200).json(video[0]);
     })
     .catch((error) => {
       res.status(500).json(error);
