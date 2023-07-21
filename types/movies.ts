@@ -6,6 +6,13 @@ export interface RequestBodyTimeframe extends NextApiRequest {
   };
 }
 
+export interface RequestBodyTimeframePage extends NextApiRequest {
+  body: {
+    timeframe: 'day' | 'week';
+    page: number;
+  };
+}
+
 export interface RequestBodyId extends NextApiRequest {
   body: {
     id: string;
