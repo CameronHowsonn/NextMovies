@@ -40,7 +40,7 @@ const TvCard: React.FC<FilmCardProps> = ({ data, showReleaseDate = false }) => {
   return (
     <Card>
       <TopContainer>
-        <Link href={`/film/${data?.id}`}>
+        <Link href={`/movie/${data?.id}`}>
           <ImageContainer>
             <img
               src={`https://image.tmdb.org/t/p/w500${data?.poster_path}`}
