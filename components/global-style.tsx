@@ -55,8 +55,13 @@ const GlobalStyle = createGlobalStyle`
   #__next {
     min-height: 100%;
     max-width: 100vw;
+    width: 100vw;
+    overflow-x: hidden;
   }
-
+  
+  main {
+    min-width: 0;
+  }
   a {
     text-decoration: none;
   }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Container from './container';
 import FilmCard from './film-card';
@@ -128,6 +129,15 @@ const SwiperSlideItem = styled(SwiperSlide)`
 
 const SliderContainer = styled(Container)`
   margin: 4rem 0;
+
+  width: 100%;
+  max-width: 100%;
+  max-height: 100vh;
+  // CSS Grid/Flexbox bug size workaround
+  // @see https://github.com/kenwheeler/slick/issues/982
+  // @see https://github.com/nolimits4web/swiper/issues/3599
+  min-height: 0;
+  min-width: 0;
 `;
 
 const ButtonContainer = styled.div`
