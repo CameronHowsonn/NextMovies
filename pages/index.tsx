@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import BrowseHero from '../components/browse/hero';
 import FullWidthSlider from '../components/full-width-slider';
 import { MovieItem } from '../types/movies';
+import { PersonDetails } from '../types/people';
 
 const Index: React.FC = () => {
   const [upcomingFilms, setUpcomingFilms] = useState<MovieItem[]>(null);
   const [topRatedFilms, setTopRatedFilms] = useState<MovieItem[]>(null);
   const [getTrendingTv, setGetTrendingTv] = useState(null);
-  const [trendingPeople, setTrendingPeople] = useState(null);
+  const [trendingPeople, setTrendingPeople] = useState<PersonDetails[]>(null);
 
   useEffect(() => {
     fetch('/api/movies/get-upcoming', {
@@ -43,7 +44,6 @@ const Index: React.FC = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             setGetTrendingTv(data.results);
           });
       })

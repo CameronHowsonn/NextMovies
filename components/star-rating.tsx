@@ -1,9 +1,10 @@
 import { AiFillStar } from 'react-icons/ai';
 import styled from 'styled-components';
+import { MovieItem } from '../types/movies';
 import Text from './text';
 
 interface StarRatingProps {
-  rating: number;
+  rating: MovieItem['vote_average'];
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
