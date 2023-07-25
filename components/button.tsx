@@ -20,7 +20,7 @@ export interface ButtonProps
   fullWidth?: boolean;
 }
 
-const StyledButton = styled.button<ButtonProps>`
+export default styled.button<ButtonProps>`
   background-color: ${(props) => props.theme.colors.red};
   color: ${(props) => props.theme.colors.white};
   border-radius: 5px;
@@ -56,5 +56,3 @@ const StyledButton = styled.button<ButtonProps>`
         }
     `}
 `;
-
-export default StyledButton;
