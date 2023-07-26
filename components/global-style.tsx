@@ -56,7 +56,6 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     max-width: 100vw;
     width: 100vw;
-    overflow-x: hidden;
   }
   
   main {
