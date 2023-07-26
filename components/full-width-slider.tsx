@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Cast, MovieItem } from '../types/movies';
+import { PersonDetails } from '../types/people';
 import Container from './container';
 import FilmCard from './film-card';
 import Heading from './heading';
@@ -12,7 +14,7 @@ import Text from './text';
 import TvCard from './tv-card';
 
 interface FullWidthSliderProps {
-  data: any;
+  data: MovieItem[] | Cast[] | PersonDetails[];
   title: string;
   subtitle?: string;
   slidesPerView?: number;
@@ -74,6 +76,7 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
           {data &&
             data.map((item, index) => {
               if (type === 'person' && !item.profile_path) return null;
+              if (type === 'movie' && !item.poster_path) return null;
 
               return (
                 <SwiperSlideItem key={index}>
