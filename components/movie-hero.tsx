@@ -56,9 +56,11 @@ const MovieHero: React.FC<MovieHeroProps> = ({ filmData }) => {
         <Stack gap={1}>
           <h1>
             {filmData?.title}
-            {`(`}
-            {new Date(filmData?.release_date).getFullYear()}
-            {`)`}
+            <span>
+              {`(`}
+              {new Date(filmData?.release_date).getFullYear()}
+              {`)`}
+            </span>
           </h1>
           <Heading as={4}>{filmData?.tagline}</Heading>
           <Text>{filmData?.overview}</Text>
@@ -87,6 +89,10 @@ const HeroText = styled.div`
   z-index: 5;
   flex: 0 1 55%;
   margin-right: 5rem;
+
+  span {
+    font-weight: 400;
+  }
 `;
 
 const HeroImage = styled.img`
@@ -111,6 +117,7 @@ const HeroImageContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 5rem;
+  min-height: 500px;
 
   &::after {
     content: '';
@@ -134,7 +141,8 @@ const HeroImageContainer = styled.div`
 
 const HeroImagePosterContainer = styled.div`
   height: 60vh;
-  max-height: 100%;
+  max-height: 500px;
+  min-height: 400px;
   z-index: 5;
   position: relative;
 
