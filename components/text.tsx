@@ -14,19 +14,15 @@ interface TextProps extends ColorProps, SpaceProps, TypographyProps {
   onClick?: () => void;
 }
 
-const Text: React.FC<TextProps> = ({ children, className, onClick }) => {
-  return (
-    <TextItem className={className} onClick={onClick}>
-      {children}
-    </TextItem>
-  );
-};
-
-export default Text;
-
-const TextItem = styled.p<TextProps>`
+export default styled.p<TextProps>`
   color: ${({ theme }) => theme.colors.white};
+  line-height: 1.5rem;
   ${color}
   ${space}
   ${typography}
+
+
+  .bold {
+    font-weight: 700;
+  }
 `;
