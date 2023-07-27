@@ -45,15 +45,17 @@ const Card = styled(Stack)`
 
 const ImageContainer = styled.div`
   overflow: hidden;
+  min-height: 320px;
+
+  img {
+    min-height: 320px;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const TextContainer = styled(Stack)`
   padding: 1rem;
-`;
-
-const ReleaseDate = styled(Text)`
-  font-size: 12px;
-  font-weight: 600;
 `;
 
 const TopContainer = styled.div`
