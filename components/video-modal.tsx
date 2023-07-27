@@ -31,11 +31,21 @@ const VideoModal: React.FC<VideoModalProps> = ({ url, site }) => {
 
     document.addEventListener('resize', () => setSizes());
     document.addEventListener('click', closeOnClickedOutside);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        setIsModalOpen(false);
+      }
+    });
 
     setSizes();
     return () => {
       document.removeEventListener('resize', () => setSizes());
       document.removeEventListener('click', closeOnClickedOutside);
+      document.removeEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          setIsModalOpen(false);
+        }
+      });
     };
   }, []);
 
