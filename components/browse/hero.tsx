@@ -102,10 +102,12 @@ const BrowseHero: React.FC = () => {
                 <Heading as={1}>{movie?.title}</Heading>
                 <StarRating rating={Math.ceil(movie?.vote_average)} />
               </SwiperSlideText>
-              <ViewMoreButton>
-                <Link href={`/movie/${movie?.id}`}>View Details</Link>
-                <BsChevronRight />
-              </ViewMoreButton>
+              <Link href={`/movie/${movie?.id}`}>
+                <ViewMoreButton>
+                  View Details
+                  <BsChevronRight />
+                </ViewMoreButton>
+              </Link>
               <img
                 src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                 alt={movie.title}
