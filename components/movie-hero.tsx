@@ -53,7 +53,7 @@ const MovieHero: React.FC<MovieHeroProps> = ({ filmData }) => {
         />
       )}
       <HeroText>
-        <Stack gap={1}>
+        <Stack gap={2}>
           <h1>
             {filmData?.title}
             <span>
