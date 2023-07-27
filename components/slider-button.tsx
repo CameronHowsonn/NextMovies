@@ -84,7 +84,7 @@ const SliderButtonElement = styled.button<{
   }
 
   &:hover {
-    transform: translateY(-50%) scale(1.15);
+    transform: scale(1.15);
     .first {
       transform: translateX(150%);
       ${(props) =>

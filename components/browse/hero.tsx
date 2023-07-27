@@ -200,6 +200,10 @@ const InnerContainer = styled.div`
   .prev,
   .next {
     top: 2.5rem;
+    transform: translateY(-50%);
+    &:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
   }
 
   .prev {
