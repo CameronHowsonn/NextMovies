@@ -1,130 +1,43 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import FullWidthSlider from '../../components/full-width-slider';
 import MovieHero from '../../components/movie-hero';
 import MovieStats from '../../components/movie-stats';
 import Reviews from '../../components/reviews';
-import { MovieItem, MovieReviews, Review } from '../../types/movies';
+import { MovieItem, Review } from '../../types/movies';
 
-const MovieSlug = () => {
-  const router = useRouter();
-  const [filmData, setFilmData] = useState<MovieItem>(null);
-  const [credits, setCredits] = useState(null);
-  const [reviews, setReviews] = useState<Review[]>(null);
-  const [error, setError] = useState(false);
-  const [filmId, setFilmId] = useState(null);
-  const [similar, getSimilar] = useState(null);
-  const [images, getImages] = useState(null);
+interface MovieSlugProps {
+  movieData: MovieItem;
+  movieCredits: any;
+  similarMovies: MovieItem[];
+  movieImages: any;
+  movieReviews: Review[];
+  errors: string[];
+}
 
+const MovieSlug: React.FC<MovieSlugProps> = ({
+  movieData,
+  movieCredits,
+  similarMovies,
+  movieImages,
+  movieReviews,
+  errors,
+}) => {
   useEffect(() => {
-    setFilmId(router?.query?.slug);
-  }, [router?.query?.slug]);
-
-  useEffect(() => {
-    const getData = async () => {
-      await fetch(`/api/movies/get-film-by-id`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: filmId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setFilmData(data);
-        })
-        .catch((err) => {
-          setError(true);
-          toast.error('Cannot fetch movie data.');
-        });
-      await fetch(`/api/movies/get-film-credits`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: filmId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setCredits(data.cast);
-        })
-        .catch((err) => {
-          setError(true);
-          toast.error('Cannot fetch movie data.');
-        });
-      // Get recommendations for the movie
-      await fetch(`/api/movies/get-similar`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: filmId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          getSimilar(data.results);
-        })
-        .catch((err) => {
-          setError(true);
-          toast.error('Cannot fetch movie data.');
-        });
-      // get-film-images
-      await fetch(`/api/movies/get-film-images`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: filmId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          getImages(data);
-          console.log(data);
-        });
-
-      // api/movies/get-reviews
-      await fetch(`/api/movies/get-reviews`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: filmId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data: MovieReviews) => {
-          console.log(data.results);
-          setReviews(data.results);
-        })
-        .catch((err) => {
-          setError(true);
-          toast.error('Cannot fetch movie data.');
-        });
-    };
-    if (filmId) {
-      getData();
-    }
-  }, [filmId]);
+    errors.forEach((error) => {
+      toast.error(error);
+    });
+  }, [errors]);
 
   return (
     <>
-      {filmData && <MovieHero filmData={filmData} />}
+      {movieData && <MovieHero filmData={movieData} />}
       <MovieContainer>
-        {filmData && credits && (
+        {movieData && movieCredits && (
           <FullWidthSlider
-            data={credits}
+            data={movieCredits}
             title='Cast'
             subtitle='Actors and Actresses'
             slidesPerView={4}
@@ -132,12 +45,12 @@ const MovieSlug = () => {
             type={'person'}
           />
         )}
-        {filmData && <MovieStats {...filmData} />}
+        {movieData && <MovieStats {...movieData} />}
       </MovieContainer>
-      {reviews && <Reviews reviews={reviews} />}
-      {similar && (
+      {movieReviews && <Reviews reviews={movieReviews} />}
+      {similarMovies && (
         <FullWidthSlider
-          data={similar}
+          data={similarMovies}
           title='Similar Movies'
           subtitle='Movies you might like'
           slidesPerView={4}
@@ -155,3 +68,118 @@ const MovieContainer = styled.div`
   display: grid;
   grid-template-columns: auto 25%;
 `;
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  resolvedUrl,
+}) => {
+  const id = resolvedUrl.split('/')[2];
+  let errors = [];
+
+  const movieData = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/movies/get-film-by-id`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => data)
+    .catch((err) => {
+      console.log(err);
+      errors.push('Cannot fetch movie data.');
+    });
+
+  const movieCredits = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/movies/get-film-credits`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => data.cast)
+    .catch((err) => {
+      console.log(err);
+      errors.push('Cannot fetch movie credits.');
+    });
+
+  const similarMovies = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/movies/get-similar`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => data.results)
+    .catch((err) => {
+      console.log(err);
+      errors.push('Cannot fetch similar movies.');
+    });
+
+  const movieImages = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/movies/get-film-images`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => data)
+    .catch((err) => {
+      console.log(err);
+      errors.push('Cannot fetch movie images.');
+    });
+
+  const movieReviews = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/movies/get-reviews`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => data.results)
+    .catch((err) => {
+      console.log(err);
+      errors.push('Cannot fetch movie reviews.');
+    });
+
+  return {
+    props: {
+      movieData,
+      movieCredits,
+      similarMovies,
+      movieImages,
+      movieReviews,
+      errors,
+    },
+  };
+};
