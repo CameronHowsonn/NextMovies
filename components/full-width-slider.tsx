@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -8,6 +8,7 @@ import Container from './container';
 import FilmCard from './film-card';
 import Heading from './heading';
 import PersonCard from './person-card';
+import Select from './select';
 import SliderButton from './slider-button';
 import Stack from './stack';
 import Text from './text';
@@ -20,6 +21,8 @@ interface FullWidthSliderProps {
   slidesPerView?: number;
   showReleaseDate?: boolean;
   type?: 'movie' | 'tv' | 'person';
+  minHeight?: number;
+  dropDownOptions?: string[];
 }
 
 const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
@@ -29,12 +32,30 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
   slidesPerView = 5,
   showReleaseDate = false,
   type,
+  minHeight = 600,
+  dropDownOptions,
 }) => {
   const [slider, setSlider] = useState(null);
   const [sliderIndex, setSliderIndex] = useState<number>(0);
+  const [dropDownSelection, setDropDownSelection] = useState<string>('all');
+
+  // Filter the data based on the dropdown selection
+  const slideItems = useMemo(() => {
+    return [...(data ?? [])].filter((item: PersonDetails) => {
+      if (type === 'person') {
+        if (dropDownSelection === 'all') return true;
+        if (dropDownSelection === 'actors')
+          return item.known_for_department === 'Acting';
+        if (dropDownSelection === 'staff')
+          return item.known_for_department !== 'Acting';
+      } else {
+        return true;
+      }
+    });
+  }, [data, dropDownSelection, type]);
 
   return (
-    <SliderContainer>
+    <SliderContainer $minHeight={minHeight}>
       <Stack gap={4}>
         <Header>
           <HeaderText>
@@ -43,6 +64,14 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
           </HeaderText>
           {slider?.initialized && (
             <ButtonContainer>
+              {dropDownOptions && (
+                <Select
+                  options={dropDownOptions}
+                  onChange={(e) => {
+                    setDropDownSelection(e.target.value);
+                  }}
+                />
+              )}
               <SliderButton
                 variant='prev'
                 disabled={sliderIndex === 0}
@@ -73,11 +102,10 @@ const FullWidthSlider: React.FC<FullWidthSliderProps> = ({
           }}
           lazyPreloadPrevNext={1}
         >
-          {data &&
-            data.map((item, index) => {
+          {slideItems &&
+            slideItems.map((item, index) => {
               if (type === 'person' && !item.profile_path) return null;
               if (type === 'movie' && !item.poster_path) return null;
-
               return (
                 <SwiperSlideItem key={index}>
                   {type === 'tv' && (
@@ -130,17 +158,14 @@ const SwiperSlideItem = styled(SwiperSlide)`
   }
 `;
 
-const SliderContainer = styled(Container)`
+const SliderContainer = styled(Container)<{ $minHeight?: number }>`
   margin: 4rem 0;
-
   width: 100%;
   max-width: 100%;
   max-height: 100vh;
-  // CSS Grid/Flexbox bug size workaround
-  // @see https://github.com/kenwheeler/slick/issues/982
-  // @see https://github.com/nolimits4web/swiper/issues/3599
-  min-height: 0;
+  min-height: 500px;
   min-width: 0;
+  min-height: ${(props) => props.$minHeight}px;
 `;
 
 const ButtonContainer = styled.div`

@@ -43,6 +43,8 @@ const MovieSlug: React.FC<MovieSlugProps> = ({
             slidesPerView={4}
             showReleaseDate={false}
             type={'person'}
+            minHeight={450}
+            dropDownOptions={['actors', 'staff']}
           />
         )}
         {movieData && <MovieStats {...movieData} />}
