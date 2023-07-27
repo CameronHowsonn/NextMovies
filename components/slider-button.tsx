@@ -54,7 +54,6 @@ const SliderButtonElement = styled.button<{
   border: none;
   cursor: pointer;
   z-index: 4;
-  transform: translateY(-50%);
   padding: 0.5rem;
   border-radius: 50%;
   display: flex;
