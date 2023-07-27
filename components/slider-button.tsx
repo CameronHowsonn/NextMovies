@@ -26,8 +26,18 @@ const SliderButton: React.FC<SliderButtonProps> = ({
       className={className}
       position={position}
       colorVariant={colorVariant}
+      variant={variant}
     >
-      {variant === 'prev' ? <BsChevronLeft /> : <BsChevronRight />}
+      {variant === 'prev' ? (
+        <BsChevronLeft className='first' />
+      ) : (
+        <BsChevronRight className='first' />
+      )}
+      {variant === 'prev' ? (
+        <BsChevronLeft className='second' aria-hidden='true' />
+      ) : (
+        <BsChevronRight className='second' aria-hidden='true' />
+      )}
     </SliderButtonElement>
   );
 };
@@ -37,6 +47,7 @@ export default SliderButton;
 const SliderButtonElement = styled.button<{
   position?: 'absolute' | 'relative';
   colorVariant?: 'light' | 'dark';
+  variant?: 'prev' | 'next';
 }>`
   position: ${(props) => props.position};
   background: ${(props) => props.theme.colors.red};
@@ -51,6 +62,20 @@ const SliderButtonElement = styled.button<{
   justify-content: center;
   color: ${(props) => props.theme.colors.white};
   transition: transform 0.3s ease-in-out, background 0.2s ease-in-out;
+  overflow: hidden;
+  width: 2rem;
+  height: 2rem;
+
+  .first {
+    position: absolute;
+  }
+
+  .second {
+    position: absolute;
+    transform: translateX(
+      ${(props) => (props.variant === 'prev' ? '150%' : '-150%')}
+    );
+  }
 
   &:disabled {
     cursor: not-allowed;
@@ -61,6 +86,17 @@ const SliderButtonElement = styled.button<{
 
   &:hover {
     transform: translateY(-50%) scale(1.15);
+    .first {
+      transform: translateX(150%);
+      ${(props) =>
+        props.variant === 'prev' &&
+        `
+        transform: translateX(-150%);
+      `}
+    }
+    .second {
+      transform: translateX(0);
+    }
     background-color: ${(props) =>
       props.colorVariant === 'light'
         ? props.theme.colors.white
