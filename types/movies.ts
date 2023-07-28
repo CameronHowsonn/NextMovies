@@ -19,6 +19,16 @@ export interface RequestBodyId extends NextApiRequest {
   };
 }
 
+export interface RequestBodyLists extends NextApiRequest {
+  body: {
+    lists: {
+      id: string;
+      name: string;
+      films: string[];
+    }[];
+  };
+}
+
 export interface RequestBodyIdPageSort extends NextApiRequest {
   body: {
     id: string;
