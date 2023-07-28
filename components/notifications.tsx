@@ -28,7 +28,7 @@ const Notifications: React.FC = () => {
   }, [session]);
 
   return (
-    <NotificationContainer hasNotifications={hasUnreadNotifications}>
+    <NotificationContainer $hasNotifications={hasUnreadNotifications}>
       <Link href='/notifications'>
         <AiOutlineBell fontSize={'1.75rem'} />
       </Link>
@@ -38,7 +38,7 @@ const Notifications: React.FC = () => {
 
 export default Notifications;
 
-const NotificationContainer = styled.div<{ hasNotifications: boolean }>`
+const NotificationContainer = styled.div<{ $hasNotifications: boolean }>`
   position: relative;
   cursor: pointer;
   top: 0.25rem;
@@ -46,7 +46,7 @@ const NotificationContainer = styled.div<{ hasNotifications: boolean }>`
     color: ${(props) => props.theme.colors.white};
   }
   ${(props) =>
-    !props.hasNotifications &&
+    !props.$hasNotifications &&
     `
       &::after {
         content: '';
