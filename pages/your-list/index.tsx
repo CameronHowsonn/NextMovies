@@ -7,8 +7,8 @@ const YourList: React.FC = () => {
   const [sharedListData, setSharedListData] = useState(null);
 
   useEffect(() => {
-    if (session?.user?.id) {
-      fetch(`/api/auth/get-list`, {
+    const getData = async () => {
+      await fetch(`/api/auth/get-list`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -19,12 +19,11 @@ const YourList: React.FC = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setListData(data.lists);
         })
         .catch((err) => console.log(err));
 
-      fetch(`/api/list/get-shared`, {
+      await fetch(`/api/list/get-shared`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,8 +37,56 @@ const YourList: React.FC = () => {
           setSharedListData(data);
         })
         .catch((err) => console.log(err));
+    };
+
+    if (session?.user?.id) {
+      getData();
     }
   }, [session]);
+
+  useEffect(() => {
+    const getFilms = async () => {
+      try {
+        const response = await fetch(`/api/movies/get-films-by-ids`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lists: [
+              ...listData?.map((list) => {
+                return {
+                  id: list.id,
+                  name: list.name,
+                  films: list.movieList,
+                };
+              }),
+              ...sharedListData?.sharedLists?.map((list) => {
+                return {
+                  id: list.id,
+                  name: list.name,
+                  films: list.movieList,
+                };
+              }),
+            ],
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch films: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Fetched data:', data);
+      } catch (err) {
+        console.log('Error fetching films:', err);
+      }
+    };
+
+    if (sharedListData?.sharedLists?.length > 0 && listData?.length > 0) {
+      getFilms();
+    }
+  }, [listData, sharedListData]);
 
   return (
     <>
